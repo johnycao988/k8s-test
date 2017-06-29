@@ -37,7 +37,7 @@
 		<dependency>
 			<groupId>com.cly</groupId>
 			<artifactId>comm-lib</artifactId>
-			<version>1.52</version>
+			<version>1.0</version>
 		</dependency> 
 		
 		<dependency>
