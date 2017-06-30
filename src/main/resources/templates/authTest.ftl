@@ -11,6 +11,9 @@
 
   <input type="submit" value="Auth Test" />
   
+  <a href="/logout">Logout</a>  
+
+  
 </form>
  
 </body>

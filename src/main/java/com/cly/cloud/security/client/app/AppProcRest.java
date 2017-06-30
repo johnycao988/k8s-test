@@ -34,4 +34,15 @@ public class AppProcRest {
 		return "authTestResult";
 	}
 
+	@RequestMapping(value = "/logout")
+	public String logout(HttpServletRequest request, HttpServletResponse response) throws SecurityAuthException {
+
+		ClientSecurityServiceManager.getClientSecurityFilterService().logout(request, response);
+		
+		Application.getLogger().info("Logout OK.");
+		
+		return "logout";
+
+	}
+
 }
