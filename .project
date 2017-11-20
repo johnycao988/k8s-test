@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <projectDescription>
-	<name>cloud.security.client</name>
+	<name>k8s-test</name>
 	<comment></comment>
 	<projects>
 	</projects>

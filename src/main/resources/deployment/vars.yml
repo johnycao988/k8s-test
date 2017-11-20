@@ -1,0 +1,4 @@
+DOCKER_IMG_NAME: 10.39.101.226:5000/k8s-test:1.0
+TEMP_FOLDER: /home/jenkins/k8s-test.tmp
+JENKINS_WORKSPACE_PATH: /var/jenkins_home/workspace
+ 

@@ -1,31 +1,26 @@
----
-- hosts: webservers
+- hosts: MASTER_SERVER
   remote_user: jenkins
-  tasks:
+  tasks:  
+  - name: Create temp folder ...
+    shell: mkdir {{TEMP_FOLDER}} 
+    ignore_errors: yes
      
-  - name: Remove Cloud security client container ...
-    shell: docker rm -f cloud.security.client
+  - name: Copy k8s-test Dockerfile ...
+    copy: src=Dockerfile dest= {{TEMP_FOLDER}}
+  - name: Copy k8s-test deployment test.yml ...
+    copy: src=test.yml dest= {{TEMP_FOLDER}}      
+### build image --begin
+  - name: Copy k8s-test jar file ...
+    copy: src={{JENKINS_WORKSPACE_PATH}}/k8s-test/target/k8s-test-1.0.jar dest={{TEMP_FOLDER}}
+  - name: Build k8s-test image ...
+    shell: cd  {{TEMP_FOLDER}}  && sudo docker build -t  {{DOCKER_IMG_NAME}} && docker push {{DOCKER_IMG_NAME}}
+### build image --end  
+  - name: delete k8s-test services...
+    shell: sudo kubectl delete service k8s-test-service1 k8s-test-service2
+    ignore_errors: yes
+  - name: delete k8s-test deployment...
+    shell: sudo kubectl delete deployment k8s-test-deployment
     ignore_errors: yes
 
-  - name: Remove Cloud security client image ...
-    shell: docker rmi -f cloud.security.client
-    ignore_errors: yes
-  
-  - name: Create temp folder ...
-    shell: mkdir /home/jenkins/cloud.security.client.tmp && mkdir /home/jenkins/cloud.security.client.tmp/logs
-    ignore_errors: yes
-    
-  - name: Copy Cloud security client jar ...
-    copy: src=cloud.security.client-1.0.jar dest=/home/jenkins/cloud.security.client.tmp
-  
-  - name: Copy Cloud security client Dockerfile ...
-    copy: src=Dockerfile dest=/home/jenkins/cloud.security.client.tmp
-  
-  - name: Build Cloud security client image ...
-    shell: cd /home/jenkins/cloud.security.client.tmp && docker build -t cloud.security.client .
-  
-  - name: Run Cloud security client containers...
-    shell: docker run -d --name cloud.security.client -p 3000:3000 -e CLOUD.CONFIG.ROOT.PATH=/cloud.config/test/cloud.security.client/ -e CLOUD.CONFIG.SERVICE.URL=http://10.39.101.226:7098/GetConfigFile -e CLOUD.CONFIG.SERVICE.AUTH.CODE=config.auth.code:001 --restart=always -v /logs:/logs cloud.security.client
-    
- 
- 
+  - name: create k8s-test deployment...
+    shell: sudo kubectl create -f test.yml 
