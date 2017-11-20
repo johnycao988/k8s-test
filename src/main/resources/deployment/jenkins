@@ -1,3 +1,5 @@
-cd $WOKRSPACE/src/main/resources/deployment
+mvn package
+
+cd $WORKSPACE/src/main/resources/deployment
 
 ansible-playbook -i ./hosts ./ansible.yml
