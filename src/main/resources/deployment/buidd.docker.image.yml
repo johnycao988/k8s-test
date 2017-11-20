@@ -8,7 +8,7 @@
     ignore_errors: yes
      
   - name: Copy k8s-test Dockerfile ...
-    copy: src=Dockerfile dest= {{TEMP_FOLDER}}/Dockerfile
+    copy: src=Dockerfile dest= /home/jenkins/k8s-test.tmp
 
   - name: Copy k8s-test jar file ...
     copy: src={{JENKINS_WORKSPACE_PATH}}/k8s-test/target/k8s-test-1.0.jar dest={{TEMP_FOLDER}}/k8s-test-1.0.jar
