@@ -8,9 +8,10 @@
     ignore_errors: yes
      
   - name: Copy k8s-test Dockerfile ...
-    copy: src=Dockerfile dest= /home/jenkins/k8s-test.tmp
+    copy: src=Dockerfile dest=/home/jenkins/k8s-test.tmp
 
   - name: Copy k8s-test jar file ...
-    copy: src={{JENKINS_WORKSPACE_PATH}}/k8s-test/target/k8s-test-1.0.jar dest={{TEMP_FOLDER}}/k8s-test-1.0.jar
+    copy: src={{JENKINS_WORKSPACE_PATH}}/k8s-test/target/k8s-test-1.0.jar dest={{TEMP_FOLDER}}
+    
   - name: Build k8s-test image ...
     shell: cd  {{TEMP_FOLDER}}  && sudo docker build -t  {{DOCKER_IMG_NAME}} && docker push {{DOCKER_IMG_NAME}}
