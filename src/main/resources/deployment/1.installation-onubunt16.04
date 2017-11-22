@@ -1,0 +1,69 @@
+### refereces: https://kubernetes.io/docs/setup/
+
+$ sudo apt-get update && apt-get install -y apt-transport-https
+
+$ sudo apt install docker.io && sudo systemctl start docker && sudo systemctl enable docker
+
+$ sudo curl -s https://packages.cloud.google.com/apt/doc/apt-key.gpg | apt-key add
+
+$ vim /etc/apt/sources.list.d/kubernetes.list
+  ## enter the following content:
+  deb http://apt.kubernetes.io/ kubernetes-xenial main  
+
+## close swap
+$ swapoff
+##open /etc/fstab file and remark swap line.
+$ vim /etc/fstab  
+
+$ reboot
+  
+$ apt-get update && apt-get install -y kubelet kubeadm kubectl kubernetes-cni  
+
+$ setenforce 0 
+
+$ kubeadm init --token-ttl=0  --pod-network-cidr=10.244.0.0/16 --apiserver-advertise-address=10.39.101.226
+
+## Need to save this info for a node to join kubernetes master.
+# kubeadm join --token ...
+##
+
+ 
+$ mkdir -p $HOME/.kube && sudo cp -i /etc/kubernetes/admin.conf $HOME/.kube/config && sudo chown $(id -u):$(id -g) $HOME/.kube/config
+$ export KUBECONFIG=/etc/kubernetes/admin.conf 
+
+#You must deploy a pod network before anything will actually function properly. copy kube-flannel.yml   to /tmp and cd /tmp.
+$ kubectl apply -f kube-flannel.yml  
+
+# check all pods are running 
+$ kubectl get pods --all-namespaces
+
+# on a node server, run:
+$ kubeadm join --token d239e7.9b11c0ac56999c2c 10.39.101.226:6443 --discovery-token-ca-cert-hash sha256:4ef00683d596d022f449e6e10e9ba27557074c4cb3ab0bdf8eb92cd8b9cfbf30 
+
+## on master and nodes to edit /etc/resolv.conf
+$ vim /etc/resolvconf/resolv.conf.d/head 
+
+search default.svc.cluster.local svc.cluster.local cluster.local google.internal c.gce_project_id.internal
+nameserver 10.96.0.10
+nameserver 10.39.100.2
+options ndots:5
+
+$ resolvconf -u
+
+
+# On each node to run for ping check.
+$ kubectl run -i --tty busybox --image=busybox  
+ 
+
+## install kubenetes web ui
+$ kubectl create -f https://raw.githubusercontent.com/kubernetes/dashboard/master/src/deploy/recommended/kubernetes-dashboard.yaml
+
+
+## set start proxy to node for access 
+$ kubectl proxy --address='0.0.0.0'  --accept-hosts='^*$' &
+
+# you can reset kubernetes
+# $ kubeadm reset && setenforce 0 
+
+# need
+
