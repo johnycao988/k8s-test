@@ -1,0 +1,21 @@
+# Ingress 文件如下
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: traefik-ingress
+spec:
+  rules:
+  - host: traefik.www.test.com
+    http:
+      paths:
+      - path: /
+        backend:
+          serviceName: test-www
+          servicePort: 8080
+  - host: traefik.api.test.com
+    http:
+      paths:
+      - path: /
+        backend:
+          serviceName: test-api
+          servicePort: 8080
