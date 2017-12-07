@@ -1,0 +1,16 @@
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: test-ingress
+  spec:
+    tls:
+    - hosts:
+      - test
+    rules:
+    - host: test
+      http:
+      paths:
+      - path: /tea
+        backend:
+          serviceName: tea-svc
+          servicePort: 80

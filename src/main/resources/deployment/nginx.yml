@@ -1,38 +1,26 @@
 apiVersion: v1
-kind: Service
+kind: Pod
 metadata:
-  name: nginx
+  name: "nginx"
+  labels:
+    app: nginx
+  namespace: server
 spec:
-  type: NodePort
-  ports:
-  - port: 80
-    nodePort: 30080
-    targetPort: 80
-  selector:
-    app: nginx 
-
----
-apiVersion: apps/v1beta2 # for versions before 1.8.0 use apps/v1beta1
-kind: Deployment
-metadata:
-  name: nginx
-spec:
-  replicas: 2
-  selector:
-    matchLabels:
-      app: nginx
-  strategy:
-    type: Recreate
-  template:
-    metadata:
-      name: nginx
-      labels:
-        app: nginx
-    spec:
-      hostNetwork: true
-      containers:
-      - image: 10.39.101.226:5000/nginx
-        name: nginx
-        ports:
-        - containerPort: 80 
-
+  hostNetwork: true
+  containers:
+    - name: nginx
+      image: 10.39.101.226:5000/nginx
+      ports:
+        - containerPort: 80
+          hostPort: 80
+        - containerPort: 8008
+          hostPort: 8008          
+      volumeMounts:
+        - mountPath: /etc/nginx/nginx.conf
+          name: nginx-conf
+  volumes:
+    - name: nginx-conf
+      hostPath:
+        path: /config/nginx/nginx.conf
+  nodeSelector:
+    nodeName: hsbcjenkins

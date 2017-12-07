@@ -19,9 +19,11 @@ $ reboot
   
 $ apt-get update && apt-get install -y kubelet kubeadm kubectl kubernetes-cni  
 
-$ setenforce 0 
+$ systemctl enable kubelet && systemctl start kubelet
 
-$ kubeadm init --token-ttl=0  --pod-network-cidr=10.244.0.0/16 --apiserver-advertise-address=10.39.101.226
+$ setenforce 0 &&  sysctl net.bridge.bridge-nf-call-iptables=1 && sysctl net.bridge.bridge-nf-call-ip6tables=1
+
+$ kubeadm init --token-ttl=0  --pod-network-cidr=10.244.0.0/16 --apiserver-advertise-address=10.39.107.140
 
 ## Need to save this info for a node to join kubernetes master.
 # kubeadm join --token ...
@@ -31,14 +33,17 @@ $ kubeadm init --token-ttl=0  --pod-network-cidr=10.244.0.0/16 --apiserver-adver
 $ mkdir -p $HOME/.kube && sudo cp -i /etc/kubernetes/admin.conf $HOME/.kube/config && sudo chown $(id -u):$(id -g) $HOME/.kube/config
 $ export KUBECONFIG=/etc/kubernetes/admin.conf 
 
-#You must deploy a pod network before anything will actually function properly. copy kube-flannel.yml   to /tmp and cd /tmp.
-$ kubectl apply -f kube-flannel.yml  
+#You must deploy a pod network before anything will actually function properly.
+
+
+
+$ kubectl apply -f https://raw.githubusercontent.com/coreos/flannel/v0.9.1/Documentation/kube-flannel.yml  
 
 # check all pods are running 
 $ kubectl get pods --all-namespaces
 
 # on a node server, run:
-$ kubeadm join --token d239e7.9b11c0ac56999c2c 10.39.101.226:6443 --discovery-token-ca-cert-hash sha256:4ef00683d596d022f449e6e10e9ba27557074c4cb3ab0bdf8eb92cd8b9cfbf30 
+$  kubeadm join --token 487174.81da10bb37134338 10.39.107.140:6443 --discovery-token-ca-cert-hash sha256:473e748a3bbbd4da517042b19dea113deaa38269a465c8112531bb8f4d9ba7a4 
 
 ## on master and nodes to edit /etc/resolv.conf
 $ vim /etc/resolvconf/resolv.conf.d/head 
@@ -63,7 +68,14 @@ $ kubectl create -f https://raw.githubusercontent.com/kubernetes/dashboard/maste
 $ kubectl proxy --address='0.0.0.0'  --accept-hosts='^*$' &
 
 # you can reset kubernetes
-# $ kubeadm reset && setenforce 0 
+# $ kubeadm reset && setenforce 0  && ifconfig cni0 down
 
 # need
+
+
+#### Generate CA 
+# generate root CA
+$ openssl genrsa -out ca-key.pem 2048
+$ openssl req -x509 -new -nodes -key ca-key.pem -days 10000 -out ca.pem -subj "/CN=johnny-ca"
+
 
