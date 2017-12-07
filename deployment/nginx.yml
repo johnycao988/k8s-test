@@ -23,4 +23,4 @@ spec:
       hostPath:
         path: /k8s-test/deployment/nginx.conf
   nodeSelector:
-    nodeName: hsbcjenkins
+    nodeName: caocentos7
