@@ -13,6 +13,8 @@ spec:
         k8s-app: traefik-ingress-lb
         name: traefik-ingress-lb
     spec:
+      nodeSelector:
+        nodeName: hsbcjenkins
       terminationGracePeriodSeconds: 60
       hostNetwork: true
       restartPolicy: Always
