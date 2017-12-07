@@ -5,17 +5,15 @@ metadata:
   name: traefik-ingress
 spec:
   rules:
-  - host: traefik.www.test.com
+  - host: test
     http:
       paths:
-      - path: /
+      - path: /test1
         backend:
-          serviceName: test-www
-          servicePort: 8080
-  - host: traefik.api.test.com
-    http:
-      paths:
-      - path: /
+          serviceName: test1.test
+          servicePort: 3000
+      - path: /test2
         backend:
-          serviceName: test-api
-          servicePort: 8080
+          serviceName: test2.test
+          servicePort: 3000          
+ 
