@@ -3,6 +3,7 @@ apiVersion: extensions/v1beta1
 kind: Ingress
 metadata:
   name: traefik-ingress
+  namespace: test
 spec:
   rules:
   - host: test
@@ -10,10 +11,10 @@ spec:
       paths:
       - path: /test1
         backend:
-          serviceName: "test1.test"
+          serviceName: "test1"
           servicePort: 3000
       - path: /test2
         backend:
-          serviceName: "test2.test"
+          serviceName: "test2"
           servicePort: 3000          
  
