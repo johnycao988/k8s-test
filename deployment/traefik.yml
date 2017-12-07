@@ -14,7 +14,7 @@ spec:
         name: traefik-ingress-lb
     spec:
       nodeSelector:
-        nodeName: hsbcjenkins
+        nodeName: caocentos7
       terminationGracePeriodSeconds: 60
       hostNetwork: true
       restartPolicy: Always
