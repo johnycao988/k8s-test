@@ -2,45 +2,42 @@ package com.test;
 
 import org.junit.Test;
 
-import com.cs.arithmetics.EuclideanDistance;
-import com.cs.arithmetics.KNN;
-import com.cs.data.LabelDataSet;
+ 
+import com.cs.ai.data.DataSet;
+import com.cs.ai.data.Labels; 
 
 public class KNNTest {
-	
+
 	@Test
-	public void testKNN(){
-		
-		LabelDataSet lds=new LabelDataSet();
-		
-		double[] d={1,2,3};
-		
-		lds.addLabelData(d,"m0");
-		
-		double[] d1={2,3,4};
-		lds.addLabelData(d1,"m1");
+	public void testKNN() {
 
-		double[] d2={13,3,2};
-		lds.addLabelData(d2,"m2");
+		try {
 
-		double[] d3={4,1,2};
-		lds.addLabelData(d3,"m3");
+			Labels labels = new Labels();
+			
+		 	labels.addLabel("Sex", Labels.TYPE_STR);
+			labels.addLabel("Age", Labels.TYPE_NUMS);
+			labels.addLabel("Nationality", Labels.TYPE_STR);
+			labels.addLabel("City", Labels.TYPE_STR);
+			labels.addLabel("Eyes", Labels.TYPE_STR);
+			labels.addLabel("Skin", Labels.TYPE_STR);
+			labels.addLabel("Height", Labels.TYPE_NUMS);
+			labels.addLabel("Education", Labels.TYPE_STR);
+			
+			String csvFile = KNNTest.class.getResource("/knn.test.cs").getFile();
 
-		double[] d4={17,4,2};
-		lds.addLabelData(d4,"m4");
-		
-		double[] d5={1,2,3};
-		lds.addLabelData(d5,"m5");
-		
-		double[] d6={1,4,2};
-		lds.addLabelData(d6,"m6");
-		
-		double[] td={1,2,3};
+			DataSet ds = new DataSet(labels);
 
-		KNN.getLabel(td, lds, 1);
-	
+			ds.loadCSVFile(csvFile, true);
+			
+			ds.printToConsole();
+			
+			
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
 	}
 
 }
-
-

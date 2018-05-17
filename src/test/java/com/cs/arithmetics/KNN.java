@@ -2,12 +2,13 @@ package com.cs.arithmetics;
 
 import java.util.ArrayList;
 
+import com.cs.ai.data.DataSet;
 import com.cs.data.LabelData;
 import com.cs.data.LabelDataSet;
 
 public class KNN {
 
-	public static void getLabel(double[] testData, LabelDataSet lds, int k) {
+	public static void getLabel(double[] testData, DataSet ds, int[] calIndexs, int k) {
 
 		ArrayList<LabelDataDistance> al = new ArrayList<LabelDataDistance>();
 
